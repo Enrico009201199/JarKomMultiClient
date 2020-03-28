@@ -19,8 +19,7 @@ class ClientThread(threading.Thread):
                 for q in ques:
                     data = q.split(",")
                     msg = data[1] + "\na. " + data[2] + "\nb. " + data[3] + "\nc. " + data[4] + "\nd. " + data[5] 
-                    startTime = datetime.datetime.now()
-                    self.csocket.send(bytes(msg,'UTF-8'))
+                    self.csocket.sendall(bytes(msg,'UTF-8'))
                     data = self.csocket.recv(2048)
                     print(str(data))
         print ("Client at ", clientAddress , " disconnected...")
@@ -29,7 +28,7 @@ PORT = 8080
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((LOCALHOST, PORT))
-server.listen(4)
+server.listen(1)
 print("Server started")
 print("Waiting for client request..")
 while True:
