@@ -1,4 +1,4 @@
-import socket, threading
+import socket, threading, datetime
 class ClientThread(threading.Thread):
     def __init__(self,clientAddress,clientsocket):
         threading.Thread.__init__(self)
@@ -6,7 +6,6 @@ class ClientThread(threading.Thread):
         print ("New connection added: ", clientAddress)
     def run(self):
         print ("Connection from : ", clientAddress)
-        #self.csocket.send(bytes("Hi, This is from Server..",'utf-8'))
         msg = ''
         while True:
             data = self.csocket.recv(2048)
@@ -20,9 +19,10 @@ class ClientThread(threading.Thread):
                 for q in ques:
                     data = q.split(",")
                     msg = data[1] + "\na. " + data[2] + "\nb. " + data[3] + "\nc. " + data[4] + "\nd. " + data[5] 
+                    startTime = datetime.datetime.now()
                     self.csocket.send(bytes(msg,'UTF-8'))
                     data = self.csocket.recv(2048)
-                    print(data)
+                    print(str(data))
         print ("Client at ", clientAddress , " disconnected...")
 LOCALHOST = "127.0.0.1"
 PORT = 8080
