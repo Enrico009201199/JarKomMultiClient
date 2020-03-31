@@ -9,22 +9,22 @@ PORT = int(input("Masukkan port yang akan digunakan: "))
 
 score = [0, 0]
 totalQuestions = int(input("Jumlah pertanyaan yang ingin dijawab: "))
-waktu = [0, 0]
+t = [0, 0]
 filename = input("Masukkan nama file quiz : ")
 f = open(filename, 'r')
 
-cek = [False] *totalQuestions
+flag = [False] *totalQuestions
 
 def askQuestion(connlist, playerNo, ques, ans, questionNo):
     connlist[playerNo].send(ques.encode())
     time.sleep(0.1)
 
     data = connlist[playerNo].recv(PORT).decode()
-    waktu[playerNo] = datetime.datetime.now()                    #receive answer
+    t[playerNo] = datetime.datetime.now()                    #receive answer
     if ans.rstrip() == data :
-        if f[questionNo] == False :
+        if flag[questionNo] == False :
             score[playerNo]+=10
-            f[questionNo] = True
+            flag[questionNo] = True
             connlist[playerNo].send(("Jawaban Benar!").encode())
             time.sleep(0.1)
         else :
@@ -37,9 +37,10 @@ def askQuestion(connlist, playerNo, ques, ans, questionNo):
 def sendallScore(connlist):
     global score
     for i, conn in enumerate(connlist):
-        conn.send("S")
+        conn.send("S".encode())
         time.sleep(0.1)
-        conn.send("Player "+str(i+1)+", skor kamu adalah: "+str(score[i])+"\n")
+        ket = "Player "+str(i+1)+", skor kamu adalah: "+str(score[i])
+        conn.send(ket.encode())
         time.sleep(0.1)
 
 def scoreFinal() :
